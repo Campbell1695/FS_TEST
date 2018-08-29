@@ -1,0 +1,142 @@
+// Place all the styles related to the Welcome controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+body
+{
+  font-size: 12px;
+}
+h2
+{
+  text-align: center;
+}
+ul
+{
+  list-style-type: none;
+}
+
+.results
+{
+  width: 90%;
+}
+
+.sideBar
+{
+  position: absolute;
+  left: 0%;
+  width: 20%;
+  list-style-type: none;
+}
+
+
+
+.questionOne
+{
+  position: absolute;
+  height: 250px;
+  width:  80%;
+  margin: auto;
+}
+.qOne_PartOne
+{
+  position: absolute;
+  left: 20%;
+  width: 40%;
+  top: 115px;
+}
+
+.qOne_PartTwo
+{
+  position: absolute;
+  left: 60%;
+  width: 40%;
+  top: 115px;
+}
+
+
+.questionTwo
+{
+  position: absolute;
+  height: 250px;
+  width:  80%;
+  top: 400px;
+  margin: auto;
+}
+.qTwo_PartOne
+{
+  position: absolute;
+  left: 20%;
+  width: 25%;
+  top: 95px;
+}
+.qTwo_PartTwo
+{
+  position: absolute;
+  left: 45%;
+  width: 25%;
+  top: 95px;
+}
+.qTwo_PartThree
+{
+  position: absolute;
+  left: 70%;
+  width: 30%;
+  top: 95px;
+}
+.questionThree
+{
+  position: absolute;
+  height: 250px;
+  width:  80%;
+  top: 650px;
+  margin: auto;
+}
+.qThree_PartOne
+{
+  position: absolute;
+  left: 20%;
+  width: 25%;
+  top: 125px;
+}
+.qThree_PartTwo
+{
+  position: absolute;
+  left: 45%;
+  width: 25%;
+  top: 125px;
+}
+.qThree_PartThree
+{
+  position: absolute;
+  left: 70%;
+  width: 30%;
+  top: 125px;
+}
+.questionFour
+{
+  position: absolute;
+  height: 250px;
+  width:  80%;
+  top: 900px;
+  margin: auto;
+}
+.qFour_PartOne
+{
+  position: absolute;
+  left: 20%;
+  width: 25%;
+  top: 70px;
+}
+.qFour_PartTwo
+{
+  position: absolute;
+  left: 45%;
+  width: 25%;
+  top: 70px;
+}
+.qFour_PartThree
+{
+  position: absolute;
+  left: 70%;
+  width: 30%;
+  top: 70px;
+}

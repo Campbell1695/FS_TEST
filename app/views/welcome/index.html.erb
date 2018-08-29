@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>FsInvestments Test</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+
+      <div class="table_responsive">
+        <h1 align="center">FS Investments Test</h1>
+        <br />
+        <div align="center">
+          <!--Button to begin test-->
+          <button type="button" name="Load_data" id="load_data" class="btn btn-info">Begin</button>
+
+        </div>
+        <br />
+
+
+      </div>
+      <div class="results">
+        <div class="questionOne">
+          <h1>1. Provide a Sales Summary</h1>
+          <div class="sideBar">
+            <ul>
+              <p>Summary(As of Date):</p>
+              <h3>Sales Rep:</h3>
+              <li>YTD(4/29):</li>
+              <li>MTD(1/31):</li>
+              <li>QTD(4/29):</li>
+              <li>ITD(8/29):</li>
+            </ul>
+          </div>
+
+          <div class="qOne_PartOne">
+            <ul>
+              <p id="Rep_One"></p>
+              <li id="ytd_A"></li>
+              <li id="mtd_A"></li>
+              <li id="qtd_A"></li>
+              <li id="itd_A"></li>
+            </ul>
+          </div>
+
+          <div class="qOne_PartTwo">
+            <ul>
+              <p id="Rep_Two"></p>
+              <li id="ytd_B"></li>
+              <li id="mtd_B"></li>
+              <li id="qtd_B"></li>
+              <li id="itd_B"></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="questionTwo">
+          <h1>2. Provide an Assets Under Managment Summary</h1>
+
+          <div class="sideBar">
+            <ul>
+              <h3>Sales Rep:</h3>
+              <br>
+              <li>Investor:</li>
+              <br>
+              <li>Net Amount:</li>
+            </ul>
+          </div>
+
+            <div class="qTwo_PartOne">
+              <ul>
+                <li id="rep_A"></li>
+                <br>
+                <li id="investor_One"></li>
+                <br>
+                <li id="Funds_One"></li>
+              </ul>
+            </div>
+
+            <div class="qTwo_PartTwo">
+              <ul>
+                <li id="rep_First"></li>
+                <br>
+                <li id="investor_Two"></li>
+                <br>
+                <li id="Funds_Two"></li>
+              </ul>
+            </div>
+
+
+            <div class="qTwo_PartThree">
+              <ul>
+                <li id="rep_B"></li>
+                <br>
+                <li id="investor_Three"></li>
+                <br>
+                <li id="Funds_Three"></li>
+              </ul>
+            </div>
+
+        </div>
+
+        <div class="questionThree">
+          <h1>3. Break Report</h1>
+          <h2>Red Color indicate negative amounts</h2>
+
+          <div class="sideBar">
+            <ul>
+              <li>Investor:</li>
+              <br>
+              <li>Total Shares:</li>
+              <br>
+              <li>Total Balance:</li>
+            </ul>
+          </div>
+
+          <div class="qThree_PartOne">
+            <ul>
+              <li id="investor_First"></li>
+              <br>
+              <li id="share_A"></li>
+              <br>
+              <li id="bal_A"></li>
+            </ul>
+          </div>
+
+          <div class="qThree_PartTwo">
+            <ul>
+              <li id="investor_Second"></li>
+              <br>
+              <li id="share_B"></li>
+              <br>
+              <li id="bal_B"></li>
+            </ul>
+          </div>
+
+          <div class="qThree_PartThree">
+            <ul>
+              <li id="investor_Third"></li>
+              <br>
+              <li id="share_C"></li>
+              <br>
+              <li id="bal_C"></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="questionFour">
+          <h1>4. Investor Profit</h1>
+
+          <div class="sideBar">
+            <ul>
+              <li>Investor:</li>
+              <br>
+              <li>Stock:</li>
+              <br>
+              <li>Bond:</li>
+            </ul>
+          </div>
+
+          <div class="qFour_PartOne">
+            <ul>
+              <li id="investor_A"></li>
+              <br>
+              <li id="stock_A"></li>
+              <br>
+              <li id="bond_A"></li>
+            </ul>
+          </div>
+
+          <div class="qFour_PartTwo">
+            <ul>
+              <li id="investor_B"></li>
+              <br>
+              <li>N/A</li>
+              <br>
+              <li id="bond_B"></li>
+            </ul>
+          </div>
+
+          <div class="qFour_PartThree">
+            <ul>
+              <li id="investor_C"></li>
+              <br>
+              <li id="stock_C"></li>
+              <br>
+              <li>N/A</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  $(document).ready(function(){
+    $('#load_data').click(function(){
+      $.ajax({
+        url:"/assets/Data.csv",
+        dataType:"text",
+        success:function(data)
+        {
+          /*Currently set up to take one row of the file
+           picks the row +1 of the rows actulal number since the loop starts from zero*/
+          var fs_data = data.split(/\r"\n|\r/); /* here solved a problem with proper separation*/
+          var table_data = '<table class="table table-bordered table-striped">';
+
+          /*a1, b2, c3, d4, e5, f6, g7*/
+          var column = 0;
+          for(var row = 0; row < fs_data.length; row++)
+          {
+
+            var cell_data = fs_data[row].split(",");
+            table_data += '<tr>';
+            /*count equals the row*/
+            for(var cell_count = 0; cell_count < cell_data.length; cell_count++)
+            {
+
+              if(row === 0)
+              {
+
+
+              }
+              else{
+
+
+                /*use to divi up rows and columns*/
+                if (row > 0)
+                {
+
+
+                  if (column < 7) {
+                    column++;
+                  }else {
+                    column = 1;
+                  }
+
+                  /*grabs shares and price respectivly*/
+                  var shares = cell_data[2];
+
+                  /*removes the dollar sign from price*/
+                  var prices = cell_data[3].replace(/\$/g, '');
+
+                }
+
+                /*Price*shares Pool*/
+                if (row === 1)
+                {
+                  var priceOne = prices*shares;
+                  var share_One = priceOne/prices; /*Solved problem where share_One wasn't being recieved as a number*/
+                }
+                else if (row === 2)
+                {
+                  var priceTwo = prices*shares;
+                  var share_Two = priceTwo/prices;
+                }
+                else if (row === 3)
+                {
+                  var priceThree = prices*shares;
+                  var share_Three = priceThree/prices;
+                }
+                else if (row === 4)
+                {
+                  var priceFour = prices*shares;
+                  var share_Four = priceFour/prices;
+                }
+                else if (row === 5)
+                {
+                  var priceFive = prices*shares;
+                  var share_Five = priceFive/prices;
+                }
+                else if (row === 6)
+                {
+                  var priceSix = prices*shares;
+                  var share_Six = priceSix/prices;
+                }
+                else if (row === 7)
+                {
+                  var priceSeven = prices*shares;
+                  var share_Seven = priceSeven/prices;
+                }
+                else if (row === 8)
+                {
+                  var priceEight = prices*shares;
+                  var share_Eight = priceEight/prices;
+                }
+                else if (row === 9)
+                {
+                  var priceNine = prices*shares;
+                  var share_Nine = priceNine/prices;
+                }
+                else if (row === 10)
+                {
+                  var priceTen = prices*shares;
+                  var share_Ten = priceTen/prices;
+                }
+                else if (row === 11)
+                {
+                  var priceEleven = prices*shares;
+                  var share_Eleven = priceEleven/prices;
+                }
+                else if (row === 12)
+                {
+                  var priceTwevle = prices*shares;
+                  var share_Twevle = priceTwevle/prices;
+                }
+                /*Price*shares Pool*/
+
+                if (row === 1) {
+                  /*Grab John*/
+                  document.getElementById("investor_One").innerHTML = cell_data[5].replace(/\"/g, '');
+                  document.getElementById("investor_First").innerHTML = cell_data[5].replace(/\"/g, '');
+                  document.getElementById("investor_A").innerHTML = cell_data[5].replace(/\"/g, '');
+                }
+
+
+                  if (row === 1) {
+                    /*Grab JohnQ*/
+                    document.getElementById("Rep_One").innerHTML = cell_data[6];
+                    document.getElementById("rep_A").innerHTML = cell_data[6];
+                    document.getElementById("rep_First").innerHTML = cell_data[6];
+                  }
+
+                  if (row === 3) {
+                    /*grabs john/jane|| later change to Mr and Mrs.*/
+                     document.getElementById("investor_Two").innerHTML = fs_data[row].substring(39, 65);
+                     document.getElementById("investor_Second").innerHTML = fs_data[row].substring(39, 65);
+                     document.getElementById("investor_B").innerHTML = fs_data[row].substring(39, 65);
+
+                  }
+
+                  if (row === 4) {
+                    /*grab joe*/
+                    document.getElementById("investor_Three").innerHTML = cell_data[5];
+                    document.getElementById("investor_Third").innerHTML = cell_data[5];
+                    document.getElementById("investor_C").innerHTML = cell_data[5];
+                  }
+                  /*Question 1 math*/
+                  /*YTD*/
+                  var percent = "%";
+
+                  var FundsY_One = (priceOne+priceTwo+priceThree+priceNine+priceTen-priceSix-priceSeven-priceEight-priceTwevle)-(priceOne+priceTwo+priceThree);
+                  FundsY_One = FundsY_One/(priceOne+priceTwo+priceThree);
+                  FundsY_One = FundsY_One*100;
+                  FundsY_One = FundsY_One.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                  var Ytd_A = FundsY_One.concat(percent);
+
+                  var FundsY_Two = (priceFour+priceFive-priceFour)-(priceFour);
+                  FundsY_Two = FundsY_Two/(priceFour);
+                  FundsY_Two = FundsY_Two*100;
+                  FundsY_Two = FundsY_Two.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                  var Ytd_B = FundsY_Two.concat(percent);
+
+                  /*YTD*/
+
+                  /*MTD*/
+
+                  var FundsM_One = (priceOne+priceTwo+priceThree-priceSix)-(priceOne+priceTwo+priceThree);
+                  FundsM_One = FundsM_One/(priceOne+priceTwo+priceThree);
+                  FundsM_One = FundsM_One*100;
+                  FundsM_One = FundsM_One.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                  var Mtd_A = FundsM_One.concat(percent);
+
+                  var FundsM_Two = (priceFour+priceFive)-(priceFour);
+                  FundsM_Two = FundsM_Two/(priceFour);
+                  FundsM_Two = FundsM_Two*100;
+                  FundsM_Two = FundsM_Two.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                  var Mtd_B = FundsM_Two.concat(percent);
+
+                  /*MTD*/
+
+                  /*QTD*/
+
+                  var FundsQ_One = (priceOne+priceTwo+priceThree+priceNine+priceTen-priceSix-priceSeven-priceEight-priceTwevle)-(priceOne+priceTwo+priceThree+priceNine+priceTen-priceSix-priceSeven-priceEight);
+                  FundsQ_One = FundsQ_One/(priceOne+priceTwo+priceThree+priceNine+priceTen-priceSix-priceSeven-priceEight);
+                  FundsQ_One = FundsQ_One*100;
+                  FundsQ_One = FundsQ_One.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                  var Qtd_A = FundsQ_One.concat(percent);
+
+                  var FundsQ_Two = (priceFour+priceFive-priceEleven)-(priceFour+priceFive-priceEleven);
+                  FundsQ_Two = FundsQ_Two/(priceFour+priceFive-priceEleven);
+                  FundsQ_Two = FundsQ_Two*100;
+                  FundsQ_Two = FundsQ_Two.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                  var Qtd_B = FundsQ_Two.concat(percent);
+
+                  /*QTD*/
+
+                  /*ITD*/
+
+                  var FundsI_One = (priceOne+priceTwo+priceThree-priceSix-priceSeven-priceEight+priceNine+priceTen-priceTwevle)-(priceOne+priceTwo+priceThree);
+                  FundsI_One = FundsI_One/(priceOne+priceTwo+priceThree);
+                  FundsI_One = FundsI_One*100;
+                  FundsI_One = FundsI_One.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                  var Itd_A = FundsI_One.concat(percent);
+
+
+                  var FundsI_Two = (priceFour+priceFive-priceFour)-(priceFour);
+                  FundsI_Two = FundsI_Two/(priceFour);
+                  FundsI_Two = FundsI_Two*100;
+                  FundsI_Two = FundsI_Two.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                  var Itd_B = FundsI_Two.concat(percent);
+
+                  /*ITD*/
+
+                  /*Question 1 math*/
+
+                  /*Print outs question 1*/
+                  document.getElementById("ytd_A").innerHTML = Ytd_A;
+                  if (Ytd_A.substring(0, 1) === "-")
+                  {
+                    document.getElementById("ytd_A").style.color = "red";
+                  }else {
+                    document.getElementById("ytd_A").style.color = "green";
+                  }
+
+                  document.getElementById("ytd_B").innerHTML = Ytd_B;
+                  if (Ytd_B.substring(0, 1) === "-")
+                  {
+                    document.getElementById("ytd_B").style.color = "red";
+                  }else {
+                    document.getElementById("ytd_B").style.color = "green";
+                  }
+
+                  document.getElementById("mtd_A").innerHTML = Mtd_A;
+                  if (Mtd_A.substring(0, 1) === "-")
+                  {
+                    document.getElementById("mtd_A").style.color = "red";
+                  }else {
+                    document.getElementById("mtd_A").style.color = "green";
+                  }
+
+                  document.getElementById("mtd_B").innerHTML = Mtd_B;
+                  if (Mtd_B.substring(0, 1) === "-")
+                  {
+                    document.getElementById("mtd_B").style.color = "red";
+                  }else {
+                    document.getElementById("mtd_B").style.color = "green";
+                  }
+
+                  document.getElementById("qtd_A").innerHTML = Qtd_A;
+                  if (Qtd_A.substring(0, 1) === "-")
+                  {
+                    document.getElementById("qtd_A").style.color = "red";
+                  }else {
+                    document.getElementById("qtd_A").style.color = "green";
+                  }
+
+                  document.getElementById("qtd_B").innerHTML = Qtd_B;
+                  if (Qtd_B.substring(0, 1) === "-")
+                  {
+                    document.getElementById("qtd_B").style.color = "red";
+                  }else {
+                    document.getElementById("qtd_B").style.color = "green";
+                  }
+
+                  document.getElementById("itd_A").innerHTML = Itd_A;
+                  if (Itd_A.substring(0, 1) === "-")
+                  {
+                    document.getElementById("itd_A").style.color = "red";
+                  }else {
+                    document.getElementById("itd_A").style.color = "green";
+                  }
+
+                  document.getElementById("itd_B").innerHTML = Itd_B;
+                  if (Itd_B.substring(0, 1) === "-")
+                  {
+                    document.getElementById("itd_B").style.color = "red";
+                  }else {
+                    document.getElementById("itd_B").style.color = "green";
+                  }
+                  /*Print outs question 1*/
+
+                  /*Question 2 math*/
+                  var dollar = "$";
+
+                  /*John*/
+                  var john = priceOne+priceTen+priceTwo+priceNine-priceTwevle;
+                  john = john.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                  var fund_john = dollar.concat(john);
+                  /*John*/
+
+                  /*Jane/John*/
+                  var jj = priceThree-priceSix-priceSeven-priceEight;
+                  jj = jj.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                  var fund_jj = dollar.concat(jj);
+                  /*Jane/John*/
+
+                  /*Joe*/
+                  var joe = priceFour+priceFive-priceEleven;
+                  joe = joe.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                  var fund_joe = dollar.concat(joe);
+                  /*Joe*/
+
+                  /*Question 2 math*/
+
+                  /*Print outs question 2*/
+
+                  if (fund_john.substring(1, 2) === "-")
+                  {
+                    var x = fund_john.replace('$-','-$');
+                    document.getElementById("Funds_One").innerHTML = x;
+                    document.getElementById("Funds_One").style.color = "red";
+                  }else {
+                    document.getElementById("Funds_One").innerHTML = fund_john;
+                    document.getElementById("Funds_One").style.color = "green";
+                  }
+
+
+                  if (fund_jj.substring(1, 2) === "-")
+                  {
+                    var y = fund_jj.replace('$-','-$');
+                    document.getElementById("Funds_Two").innerHTML = y;
+                    document.getElementById("Funds_Two").style.color = "red";
+                  }else {
+                    document.getElementById("Funds_Two").innerHTML = fund_jj;
+                    document.getElementById("Funds_Two").style.color = "green";
+                  }
+
+
+                  if (fund_joe.substring(1, 2) === "-")
+                  {
+                    var z = fund_joe.replace('$-','-$');
+                    document.getElementById("Funds_Three").innerHTML = z;
+                    document.getElementById("Funds_Three").style.color = "red";
+                  }else {
+                    document.getElementById("Funds_Three").innerHTML = fund_joe;
+                    document.getElementById("Funds_Three").style.color = "green";
+                  }
+
+                  /*Print outs question 2*/
+
+                  /*Question 3 math*/
+                  var dollar = "$";
+
+                  /*John*/
+                  var john_shares = share_One+share_Ten+share_Two+share_Nine-share_Twevle;
+                  var john = priceOne+priceTen+priceTwo+priceNine-priceTwevle;
+                  john = john.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                  var fund_john = dollar.concat(john);
+                  /*John*/
+
+                  /*Jane/John*/
+                  var jj_shares = share_Three-share_Six-share_Seven-share_Eight;
+                  var jj = priceThree-priceSix-priceSeven-priceEight;
+                  jj = jj.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                  var fund_jj = dollar.concat(jj);
+                  /*Jane/John*/
+
+                  /*Joe*/
+                  var joe_shares = share_Four+share_Five-share_Eleven;
+                  console.log(share_Four);
+                  var joe = priceFour+priceFive-priceEleven;
+                  joe = joe.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                  var fund_joe = dollar.concat(joe);
+                  /*Joe*/
+
+                  /*Question 3 math*/
+
+                  /*Print outs question 3*/
+                  if (john_shares < 0) {
+                    document.getElementById("share_A").innerHTML = john_shares.toFixed(4);
+                    document.getElementById("share_A").style.color = "red";
+                  }else {
+                    document.getElementById("share_A").innerHTML = john_shares.toFixed(4);
+                    document.getElementById("share_A").style.color = "green";
+                  }
+
+                  if (jj_shares < 0) {
+                    document.getElementById("share_B").innerHTML = jj_shares.toFixed(4);
+                    document.getElementById("share_B").style.color = "red";
+                  }else {
+                    document.getElementById("share_B").innerHTML = jj_shares.toFixed(4);
+                    document.getElementById("share_B").style.color = "green";
+                  }
+
+                  if (joe_shares < 0) {
+                    document.getElementById("share_C").innerHTML = joe_shares.toFixed(4);
+                    document.getElementById("share_C").style.color = "red";
+                  }else {
+                    document.getElementById("share_C").innerHTML = joe_shares.toFixed(4);
+                    document.getElementById("share_C").style.color = "green";
+                  }
+
+                  if (fund_john.substring(1, 2) === "-")
+                  {
+                    var x = fund_john.replace('$-','-$');
+                    document.getElementById("bal_A").innerHTML = x;
+                    document.getElementById("bal_A").style.color = "red";
+                  }else {
+                    document.getElementById("bal_A").innerHTML = fund_john;
+                    document.getElementById("bal_A").style.color = "green";
+                  }
+
+
+                  if (fund_jj.substring(1, 2) === "-")
+                  {
+                    var y = fund_jj.replace('$-','-$');
+                    document.getElementById("bal_B").innerHTML = y;
+                    document.getElementById("bal_B").style.color = "red";
+                  }else {
+                    document.getElementById("bal_B").innerHTML = fund_jj;
+                    document.getElementById("bal_B").style.color = "green";
+                  }
+
+
+                  if (fund_joe.substring(1, 2) === "-")
+                  {
+                    var z = fund_joe.replace('$-','-$');
+                    document.getElementById("bal_C").innerHTML = z;
+                    document.getElementById("bal_C").style.color = "red";
+                  }else {
+                    document.getElementById("bal_C").innerHTML = fund_joe;
+                    document.getElementById("bal_C").style.color = "green";
+                  }
+
+                  /*Print outs question 3*/
+
+                  /*Question 4 math*/
+                  var dollar = "$";
+
+                  /*John*/
+                  var stock_A = priceOne+priceTen;
+                  stock_A = stock_A.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                  stock_A = dollar.concat(stock_A);
+
+                  var bond_A = priceTwo+priceNine+priceTwevle;
+                  bond_A = bond_A.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                  bond_A = dollar.concat(bond_A);
+                  /*John*/
+
+                  /*Jane/John*/
+                  var bond_B = priceThree-priceSix-priceSeven-priceEight;
+                  bond_B = bond_B.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                  bond_B = dollar.concat(bond_B);
+                  /*Jane/John*/
+
+                  /*Joe*/
+                  var stock_C = priceFour+priceFive-priceEleven;
+                  stock_C = stock_C.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                  stock_C = dollar.concat(stock_C);
+                  /*Joe*/
+
+                  /*Question 4 math*/
+
+                  /*Print outs question 4*/
+
+                  if (stock_A.substring(1, 2) === "-")
+                  {
+                    var x = stock_A.replace('$-','-$');
+                    document.getElementById("stock_A").innerHTML = x;
+                    document.getElementById("stock_A").style.color = "red";
+                  }else {
+                    document.getElementById("stock_A").innerHTML = stock_A;
+                    document.getElementById("stock_A").style.color = "green";
+                  }
+                  if (bond_A.substring(1, 2) === "-")
+                  {
+                    var x = bond_A.replace('$-','-$');
+                    document.getElementById("bond_A").innerHTML = x;
+                    document.getElementById("bond_A").style.color = "red";
+                  }else {
+                    document.getElementById("bond_A").innerHTML = bond_A;
+                    document.getElementById("bond_A").style.color = "green";
+                  }
+
+
+                  if (bond_B.substring(1, 2) === "-")
+                  {
+                    var x = bond_B.replace('$-','-$');
+                    document.getElementById("bond_B").innerHTML = x;
+                    document.getElementById("bond_B").style.color = "red";
+                  }else {
+                    document.getElementById("bond_B").innerHTML = bond_A;
+                    document.getElementById("bond_B").style.color = "green";
+                  }
+
+
+                  if (stock_C.substring(1, 2) === "-")
+                  {
+                    var x = stock_C.replace('$-','-$');
+                    document.getElementById("stock_C").innerHTML = x;
+                    document.getElementById("stock_C").style.color = "red";
+                  }else {
+                    document.getElementById("stock_C").innerHTML = stock_C;
+                    document.getElementById("stock_C").style.color = "green";
+                  }
+
+                  /*Print outs question 4*/
+
+
+                  if (row === 4) {
+                    /*grab moose*/
+                    document.getElementById("Rep_Two").innerHTML = cell_data[6].replace(/\"/g, '');
+                    document.getElementById("rep_B").innerHTML = cell_data[6].replace(/\"/g, '');
+                    /*replace cleans up ''*/
+                  }
+
+
+
+                /*8888888888888888888888888888888888888888888888888888888888*/
+              }
+            }
+            table_data += '</tr>';
+          }
+          table_data += '</table>';
+          $('#table').html(table_data);
+        }
+      });
+    });
+  });
+</script>
